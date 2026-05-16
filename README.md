@@ -119,10 +119,21 @@ quick_bill/
 
 ---
 
-```
+## 🗄️ Database Schema
 
-**Models**: `User`, `Product`, `Sale`, `SaleItem`, `StockLog`  
-**Enums**: `Role` (ADMIN/STAFF), `SaleStatus` (CONFIRMED/CANCELLED), `StockLogType` (SALE/RESTOCK/ADJUSTMENT/CANCELLATION)
+| Model | Purpose |
+|-------|---------|
+| `User` | Admin and Staff accounts with role-based access |
+| `Product` | Product catalog with pricing, stock, and SKU |
+| `Sale` | Confirmed/cancelled sales with totals and timestamps |
+| `SaleItem` | Individual line items within a sale |
+| `StockLog` | Audit trail for all stock movements |
+
+| Enum | Values |
+|------|--------|
+| `Role` | `ADMIN`, `STAFF` |
+| `SaleStatus` | `CONFIRMED`, `CANCELLED` |
+| `StockLogType` | `SALE`, `RESTOCK`, `ADJUSTMENT`, `CANCELLATION` |
 
 ---
 
