@@ -119,18 +119,6 @@ quick_bill/
 
 ---
 
-## 🗄️ Database Schema
-
-```
-┌─────────┐    ┌──────────┐    ┌──────────┐
-│  User    │───▶│ Product  │    │   Sale   │
-│  (role)  │    │ (stock)  │    │ (status) │
-└────┬─────┘    └────┬─────┘    └────┬─────┘
-     │               │              │
-     │          ┌─────┴──────┐  ┌───┴──────┐
-     │          │  StockLog  │  │ SaleItem │
-     └─────────▶│  (audit)   │  │ (lines)  │
-                └────────────┘  └──────────┘
 ```
 
 **Models**: `User`, `Product`, `Sale`, `SaleItem`, `StockLog`  
@@ -209,49 +197,6 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 | Cancel Orders | ✅ | ✅ |
 | View Invoices | ✅ | ✅ |
 | Reports & Export | ✅ | ❌ |
-
----
-
-## 🔄 Transaction Safety
-
-QuickBill uses **Prisma `$transaction`** for critical operations to ensure data integrity:
-
-**Sale Creation:**
-```
-BEGIN TRANSACTION
-  → For each item: verify stock ≥ quantity (fail ALL if any insufficient)
-  → For each item: decrement stock
-  → For each item: create StockLog (SALE, -qty)
-  → Create Sale + SaleItems
-COMMIT (or ROLLBACK on any failure)
-```
-
-**Sale Cancellation:**
-```
-BEGIN TRANSACTION
-  → For each item: increment stock back
-  → For each item: create StockLog (CANCELLATION, +qty)
-  → Update Sale status → CANCELLED
-COMMIT (or ROLLBACK on any failure)
-```
-
----
-
-## 📤 Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Import the repository on [Vercel](https://vercel.com/)
-3. Set environment variables (`DATABASE_URL`, `SESSION_SECRET`)
-4. Deploy
-
-### Production Build
-
-```bash
-npm run build
-npm start
-```
 
 ---
 
