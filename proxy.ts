@@ -17,9 +17,9 @@ async function decryptSession(session: string | undefined = "") {
 }
 
 // All authenticated routes
-const protectedRoutes = ["/dashboard", "/products", "/stock", "/sales"];
+const protectedRoutes = ["/dashboard", "/products", "/stock", "/sales", "/reports"];
 // Admin-only routes — staff cannot access these
-const adminOnlyRoutes = ["/products", "/stock"];
+const adminOnlyRoutes = ["/products", "/stock", "/reports"];
 const publicRoutes = ["/login"];
 
 export async function proxy(req: NextRequest) {

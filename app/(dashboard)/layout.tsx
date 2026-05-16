@@ -2,7 +2,6 @@ import Sidebar from "@/app/components/Sidebar";
 import { logout } from "@/app/actions/auth";
 import { getSession } from "@/app/lib/session";
 import { prisma } from "@/app/lib/db";
-import Link from "next/link";
 
 export default async function DashboardLayout({
   children,
@@ -29,21 +28,11 @@ export default async function DashboardLayout({
       <Sidebar role={userRole} />
 
       {/* Main content */}
-      <div className="flex-1 lg:ml-64">
+      <div className="flex-1 lg:ml-64 main-content">
         {/* Top bar */}
         <header className="h-16 border-b border-border bg-card/50 backdrop-blur-xl sticky top-0 z-20 flex items-center justify-between px-6">
-          {/* Mobile menu */}
-          <div className="lg:hidden">
-            <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                <svg className="w-3.5 h-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                </svg>
-              </div>
-              <span className="font-bold">QuickBill</span>
-            </Link>
-          </div>
-
+          {/* Spacer for mobile hamburger button */}
+          <div className="lg:hidden w-10" />
           <div className="hidden lg:block" />
 
           {/* User info */}

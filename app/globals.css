@@ -130,3 +130,53 @@ body {
 .stagger-children > *:nth-child(8) { animation-delay: 0.4s; }
 .stagger-children > *:nth-child(9) { animation-delay: 0.45s; }
 .stagger-children > *:nth-child(10) { animation-delay: 0.5s; }
+
+/* ─── Print Styles ─────────────────────────────────────── */
+
+.no-print {
+  /* marker class for elements to hide when printing */
+}
+
+@media print {
+  /* Reset page for paper */
+  body {
+    background: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hide app chrome */
+  aside, header, nav, .no-print {
+    display: none !important;
+  }
+
+  /* Full width content */
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  /* Invoice fills the page */
+  .invoice-page {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* Remove animations */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 10mm 15mm;
+    size: A4;
+  }
+}
