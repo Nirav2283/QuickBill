@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  STAFF
+}
+
+enum StockLogType {
+  SALE
+  RESTOCK
+  ADJUSTMENT
+  CANCELLATION
+}
+
+enum SaleStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(STAFF)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products  Product[]
+  sales     Sale[]
+  stockLogs StockLog[]
+
+  @@map("users")
+}
+
+model Product {
+  id                String   @id @default(cuid())
+  name              String   @unique
+  description       String?
+  price             Decimal  @db.Decimal(10, 2)
+  stock             Int      @default(0)
+  lowStockThreshold Int      @default(10)
+  sku               String   @unique
+  category          String?
+  isActive          Boolean  @default(true)
+  createdBy         String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  creator   User       @relation(fields: [createdBy], references: [id])
+  saleItems SaleItem[]
+  stockLogs StockLog[]
+
+  @@map("products")
+}
+
+model Sale {
+  id          String     @id @default(cuid())
+  saleNumber  String     @unique
+  totalAmount Decimal    @db.Decimal(12, 2)
+  itemCount   Int        @default(0)
+  status      SaleStatus @default(CONFIRMED)
+  createdBy   String
+  createdAt   DateTime   @default(now())
+  cancelledAt DateTime?
+  cancelNote  String?
+
+  creator User       @relation(fields: [createdBy], references: [id])
+  items   SaleItem[]
+
+  @@map("sales")
+}
+
+model SaleItem {
+  id        String  @id @default(cuid())
+  saleId    String
+  productId String
+  quantity  Int
+  unitPrice Decimal @db.Decimal(10, 2)
+  lineTotal Decimal @db.Decimal(12, 2)
+
+  sale    Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("sale_items")
+}
+
+model StockLog {
+  id        String       @id @default(cuid())
+  productId String
+  type      StockLogType
+  quantity  Int
+  note      String?
+  createdBy String
+  createdAt DateTime     @default(now())
+
+  product Product @relation(fields: [productId], references: [id])
+  creator User    @relation(fields: [createdBy], references: [id])
+
+  @@map("stock_logs")
+}
